@@ -1,32 +1,39 @@
 from django.contrib import admin
-
-# Register your models here.
-from .models import CarModel, Car, Order, OrderRow, Service
-
-
-class CarModelAdmin(admin.ModelAdmin):
-    list_display = ["make", "model", "year"]
-
-
-class CarAdmin(admin.ModelAdmin):
-    list_display = ["license_plate", "client", "VIN_code", "car_model_id"]
-    list_filter = ["client", "car_model_id"]
-    search_fields = ["license_plate", "VIN_code"]
-
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ["car_id", "date"]
-
-
-class OrderRowAdmin(admin.ModelAdmin):
-    list_display = ["service_id", "order_id", "quantity"]
+from .models import (Car,
+                     CarModel,
+                     Service,
+                     Order,
+                     OrderRow)
 
 
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ["name", "price"]
+    list_display = ['name', 'price']
 
 
-admin.site.register(CarModel, CarModelAdmin)
+class CarAdmin(admin.ModelAdmin):
+    list_display = ['vin_code', 'client', 'car_model', 'license_plate']
+    list_filter = ['client', 'car_model']
+    search_fields = ['license_plate', 'vin_code']
+
+
+class OrderRowInLine(admin.TabularInline):
+    model = OrderRow
+    extra = 0
+    fields = ['service', 'qty']
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['car', 'date', 'total']
+    inlines = [OrderRowInLine]
+
+
+class OrderLineAdmin(admin.ModelAdmin):
+    list_display = ['order', 'service', 'qty', 'price']
+
+
+# Register your models here.
 admin.site.register(Car, CarAdmin)
-admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderRow, OrderRowAdmin)
+admin.site.register(CarModel)
 admin.site.register(Service, ServiceAdmin)
+admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderRow, OrderLineAdmin)
