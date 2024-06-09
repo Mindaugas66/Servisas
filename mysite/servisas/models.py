@@ -42,11 +42,19 @@ class Car(models.Model):
 
 
 class Order(models.Model):
-    date = models.DateTimeField(verbose_name="Date", auto_now_add=True)
+    date = models.DateField(verbose_name="Date", auto_now_add=True)
     car = models.ForeignKey(to="Car", verbose_name="Car", on_delete=models.CASCADE, null=True)
 
+    ORDER_STATUS = (
+        ('c', 'Completed'),
+        ('i', 'In Progress'),
+        ('ca', 'Canceled'),
+    )
+
+    status = models.CharField(max_length=2, choices=ORDER_STATUS, blank=True, default="i", help_text='Order Status')
+
     def __str__(self):
-        return f"{self.car}, {self.date}: {self.total()}"
+        return f"{self.car} {self.date}"
 
     def total(self):
         result = 0
@@ -60,7 +68,8 @@ class Order(models.Model):
 
 
 class OrderRow(models.Model):
-    order = models.ForeignKey(to="Order", verbose_name="Order", on_delete=models.CASCADE, null=True, related_name='lines')
+    order = models.ForeignKey(to="Order", verbose_name="Order", on_delete=models.CASCADE, null=True,
+                              related_name='lines')
     service = models.ForeignKey(to="Service", verbose_name="Service", on_delete=models.SET_NULL, null=True, blank=True)
     qty = models.IntegerField(verbose_name="Quantity", default=0)
 

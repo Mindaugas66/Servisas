@@ -1,0 +1,59 @@
+/* styles.css */
+
+/* Custom styles for the header section */
+.header {
+    padding: 60px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.2em;
+}
+
+/* Custom styles for the navigation bar */
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-size: 1.1em;
+}
+
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid #ffffff;
+}
+
+/* Custom styles for the content section */
+.container {
+    margin-top: 50px;
+}
+
+.container .col-sm {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom styles for the footer section */
+.footer {
+    margin-top: 50px;
+    padding: 40px;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 1em;
+}

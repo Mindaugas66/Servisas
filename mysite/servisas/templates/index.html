@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block 'title' %}HOME{% endblock %}
+
+{% block 'content' %}
+    <h1>GoodHood Info:</h1>
+    <ul>
+        <li><strong>Number of cars:</strong>{{ num_cars }} </li>
+        <li><strong>Number of Services:</strong>{{ num_services }} </li>
+        <li><strong>Number of Completed Orders:</strong>{{ num_orders }} </li>
+    </ul>
+{% endblock %}
