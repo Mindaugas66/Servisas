@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block 'content' %}
+    <h1>Cars</h1>
+    {% for car in cars %}
+        <p>{{ car.client }} {{ car.car_model }} {{ car.license_plate }} {{ car.vin_code }}</p>
+    {% endfor %}
+{% endblock %}
