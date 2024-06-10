@@ -1,44 +1,81 @@
 {% extends 'base.html' %}
 
 {% block 'content' %}
-<h1>Orders</h1>
-<div id="accordion">
-    {% for order in orders %}
-    <div class="card">
-        <div class="card-header">
-            <a class="btn" data-bs-toggle="collapse" href="#collapse{{ forloop.counter }}">
-                {{ order }} - {{ order.get_status_display }}
-            </a>
-        </div>
-        <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#accordion">
-            <div class="card-body">
-                {% for order_row in order.lines.all %}
-                    <p>{{ order_row }}</p>
-                {% endfor %}
-                <p>Total : {{ order.total }} € </p>
+<style>
+    .accordion-header a {
+        text-decoration: none;
+        color: #007BFF;
+    }
+    .accordion-header a:hover {
+        text-decoration: underline;
+    }
+    .card {
+        margin-bottom: 10px;
+    }
+    .card-header {
+        background-color: #f8f9fa; /* Light grey background */
+    }
+    .card-header .btn {
+        color: #007BFF; /* Bootstrap primary color */
+        font-weight: bold;
+    }
+    .card-body p {
+        margin: 0;
+    }
+    .pagination {
+        margin-top: 20px;
+    }
+    .page-item.active .page-link {
+        background-color: #007BFF; /* Bootstrap primary color */
+        border-color: #007BFF;
+    }
+    .page-link {
+        color: #007BFF; /* Bootstrap primary color */
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center">Orders</h1>
+    <div class="accordion" id="accordionExample">
+        {% for order in orders %}
+        <div class="card">
+            <div class="card-header" id="heading{{ forloop.counter }}">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                        {{ order }} - {{ order.get_status_display }}
+                    </button>
+                </h2>
+            </div>
+            <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionExample">
+                <div class="card-body">
+                    {% for order_row in order.lines.all %}
+                        <p>{{ order_row }}</p>
+                    {% endfor %}
+                    <p><strong>Total:</strong> {{ order.total }} €</p>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-<div class="container puslapiai">
-    <nav aria-label="...">
-        {% if orders.has_other_pages %}
-            <ul class="pagination pagination-sm justify-content-end">
-                {% for i in orders.paginator.page_range %}
-                    {% if orders.number == i %}
-                        <li class="page-item active">
-                            <a class="page-link">{{ i }}</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </nav>
-</div>
 
+    <div class="pagination-container d-flex justify-content-center mt-4">
+        {% if orders.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% for i in orders.paginator.page_range %}
+                        {% if orders.number == i %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ i }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

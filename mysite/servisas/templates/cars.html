@@ -1,8 +1,40 @@
 {% extends "base.html" %}
 
 {% block 'content' %}
-    <h1>Cars</h1>
-    {% for car in cars %}
-        <p><a href="{% url 'CarModel' car.pk %}">{{ car }}</a></p>
-    {% endfor %}
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .car-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .car-list li {
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .car-list li:hover {
+            background: #e0e0e0;
+        }
+        .car-list a {
+            text-decoration: none;
+        }
+        .car-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="container">
+        <h1>Cars</h1>
+        <ul class="car-list">
+            {% for car in cars %}
+                <li><a href="{% url 'CarModel' car.pk %}">{{ car }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
