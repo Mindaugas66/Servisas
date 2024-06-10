@@ -3,6 +3,6 @@
 {% block 'content' %}
     <h1>Cars</h1>
     {% for car in cars %}
-        <p>{{ car.client }} {{ car.car_model }} {{ car.license_plate }} {{ car.vin_code }}</p>
+        <p><a href="{% url 'CarModel' car.pk %}">{{ car }}</a></p>
     {% endfor %}
 {% endblock %}

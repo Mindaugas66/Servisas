@@ -57,3 +57,20 @@
     margin: 0;
     font-size: 1em;
 }
+.card-header {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-body ul {
+    padding-left: 0;
+}
+
+.card-body ul li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.card-body p {
+    margin-bottom: 10px;
+}

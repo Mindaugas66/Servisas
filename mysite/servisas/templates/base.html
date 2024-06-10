@@ -29,6 +29,10 @@
         <a class="nav-link orders" href="/orders">Orders</a>
       </li>
     </ul>
+    <form class="d-flex" action="{% url 'search' %}" method="get">
+        <input class="form-control me-2" name="query" type="text" placeholder="Search">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
   </div>
 </nav>
 <div class="container mt-5">

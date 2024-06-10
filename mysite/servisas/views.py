@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.views import generic
+
 from .models import CarModel, Service, Order, Car, OrderRow
 import datetime
+
 
 
 def index(request):
@@ -28,8 +33,41 @@ def Cars(request):
 def OrdersAndOrderRows(request):
     orders = Order.objects.all().order_by('-date')
     order_rows = OrderRow.objects.all()
+    paginator = Paginator(orders, per_page=3)
+    page_number = request.GET.get("page")
+    paged_orders = paginator.get_page(page_number)
     context = {
-        "orders": orders,
+        "orders": paged_orders,
         "order_rows": order_rows
     }
     return render(request, template_name="orders.html", context=context)
+
+
+def car_model_view(request, car_model):
+    car_model_instance = get_object_or_404(Car, pk=car_model)
+    context = {
+        "car_view": car_model_instance,
+    }
+    return render(request, template_name="car.html", context=context)
+
+class OrderListView(generic.ListView):
+    model = Order
+    template_name = "Orders.html"
+    context_object_name = "Orders"
+    paginate_by = 3
+
+
+def search(request):
+    query = request.GET.get('query')
+    car_search_results = Car.objects.filter(
+        Q(license_plate__icontains=query) |
+        Q(vin_code__icontains=query) |
+        Q(client__icontains=query) |
+        Q(car_model__model__icontains=query) |  # Assuming the CarModel has a 'name' field
+        Q(car_model__make__icontains=query)   # Assuming the CarModel has a 'make' field
+    )
+    context = {
+        "query": query,
+        "cars": car_search_results,
+    }
+    return render(request, template_name="search.html", context=context)

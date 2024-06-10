@@ -1,11 +1,61 @@
-{% extends "base.html" %}
-{% block 'title' %}HOME{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}HOME{% endblock %}
 
 {% block 'content' %}
-    <h1>GoodHood Info:</h1>
-    <ul>
-        <li><strong>Number of cars:</strong>{{ num_cars }} </li>
-        <li><strong>Number of Services:</strong>{{ num_services }} </li>
-        <li><strong>Number of Completed Orders:</strong>{{ num_orders }} </li>
-    </ul>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2>GoodHood Info</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Number of Cars:</strong> {{ num_cars }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Number of Services:</strong> {{ num_services }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Number of Completed Orders:</strong> {{ num_orders }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2>About GoodHood</h2>
+                </div>
+                <div class="card-body">
+                    <p>GoodHood Auto Service is dedicated to providing top-notch automotive services. Our skilled technicians are here to ensure your vehicle is always in prime condition. We offer a wide range of services, from routine maintenance to complex repairs.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2>Contact Information</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Address:</strong> 1234 Main St, Anytown, USA</p>
+                    <p><strong>Phone:</strong> (123) 456-7890</p>
+                    <p><strong>Email:</strong> info@goodhood.com</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2>Operating Hours</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Monday - Friday:</strong> 8:00 AM - 6:00 PM</p>
+                    <p><strong>Saturday:</strong> 9:00 AM - 4:00 PM</p>
+                    <p><strong>Sunday:</strong> Closed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
