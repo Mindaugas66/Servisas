@@ -17,6 +17,7 @@ class Service(models.Model):
 class CarModel(models.Model):
     make = models.CharField(verbose_name="Make", max_length=50)
     model = models.CharField(verbose_name="Model", max_length=50)
+    cover = models.ImageField("Cover", upload_to="covers", null=True, blank=True)
 
     def __str__(self):
         return f"{self.make} {self.model}"

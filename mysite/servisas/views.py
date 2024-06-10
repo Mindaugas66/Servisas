@@ -45,10 +45,13 @@ def OrdersAndOrderRows(request):
 
 def car_model_view(request, car_model):
     car_model_instance = get_object_or_404(Car, pk=car_model)
+    car_cover = car_model_instance.car_model
     context = {
+        "car_cover": car_cover,
         "car_view": car_model_instance,
     }
     return render(request, template_name="car.html", context=context)
+
 
 class OrderListView(generic.ListView):
     model = Order
