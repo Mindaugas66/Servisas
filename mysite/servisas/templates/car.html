@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 
 {% block 'content' %}
-    <h1>Car</h1>
-        <p>{{ car_view }}</p>
+    <h1>{{car_view.car_model}}</h1>
+<div class="container mt-4">
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <td>License plate:</td>
+        <td>{{ car_view.license_plate }}</td>
+      </tr>
+      <tr>
+        <td>Client:</td>
+        <td>{{ car_view.client }}</td>
+      </tr>
+      <tr>
+        <td>VIN Code:</td>
+        <td>{{ car_view.vin_code }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 {% endblock %}
