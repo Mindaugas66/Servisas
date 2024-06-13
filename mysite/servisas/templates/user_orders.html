@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block "title" %}My Orders{% endblock %}
+
+{% block 'content' %}
+<h1>My orders</h1>
+{% for order in orders %}
+<p class="{% if order.is_deadline %}text-danger{% endif %}">{{ order }}</p>
+{% endfor %}
+{% endblock %}

@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from datetime import date as data
+from datetime import timedelta
 
 
 # Create your models here.
@@ -45,7 +48,8 @@ class Car(models.Model):
 class Order(models.Model):
     date = models.DateField(verbose_name="Date", auto_now_add=True)
     car = models.ForeignKey(to="Car", verbose_name="Car", on_delete=models.CASCADE, null=True)
-
+    client = models.ForeignKey(to=User, verbose_name="Client", on_delete=models.SET_NULL, null=True, blank=True)
+    deadline = models.DateField(verbose_name="Deadline", default=data.today() + timedelta(days=7))
     ORDER_STATUS = (
         ('c', 'Completed'),
         ('i', 'In Progress'),
@@ -57,12 +61,16 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.car} {self.date}"
 
+    def is_deadline(self):
+        if data.today() > self.deadline and self.status == "i" and "ca":
+            return True
+        return False
+
     def total(self):
         result = 0
         for line in self.lines.all():
             result += line.price()
         return result
-
     class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"

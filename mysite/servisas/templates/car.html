@@ -1,34 +1,34 @@
 {% extends "base.html" %}
 
 {% block 'content' %}
-    <h1>{{ car_view.car_model }}</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
+<h1>{{ car_view.car_model }}</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
             {% if car_cover.cover %}
             <img src="{{ car_cover.cover.url }}" class="img-fluid" alt="Car Image">
-                {% else %}
-                <p>No cover image available.</p>
-                {% endif %}
-            </div>
-            <div class="col-md-8">
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <td>License plate:</td>
-                            <td>{{ car_view.license_plate }}</td>
-                        </tr>
-                        <tr>
-                            <td>Client:</td>
-                            <td>{{ car_view.client }}</td>
-                        </tr>
-                        <tr>
-                            <td>VIN Code:</td>
-                            <td>{{ car_view.vin_code }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            {% else %}
+            <p>No cover image available.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td>License plate:</td>
+                    <td>{{ car_view.license_plate }}</td>
+                </tr>
+                <tr>
+                    <td>Client:</td>
+                    <td>{{ car_view.client }}</td>
+                </tr>
+                <tr>
+                    <td>VIN Code:</td>
+                    <td>{{ car_view.vin_code }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 {% endblock %}

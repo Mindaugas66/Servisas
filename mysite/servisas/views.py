@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views import generic
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import CarModel, Service, Order, Car, OrderRow
 import datetime
 
@@ -77,3 +77,12 @@ def search(request):
         "cars": car_search_results,
     }
     return render(request, template_name="search.html", context=context)
+
+
+class MyOrderListView(LoginRequiredMixin, generic.ListView):
+    model = Order
+    template_name = "user_orders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return Order.objects.filter(client=self.request.user)
