@@ -119,7 +119,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 # media folder settings
 MEDIA_ROOT = os.path.join(BASE_DIR, 'servisas/media')
-
+LOGIN_REDIRECT_URL = '/'
 MEDIA_URL = '/media/'
 # print(MEDIA_ROOT) - nevenkite padebuginti, bus lengviau nepasiklysti django filesystem džiunglėse
 
@@ -127,3 +127,11 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_POST = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mano_pastas@gmail.com'
+# el. pašto adresas iš kurio siųsite
+EMAIL_HOST_PASSWORD = 'VerySecret'
