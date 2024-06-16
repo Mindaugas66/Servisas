@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date as data
 from datetime import timedelta
+from tinymce.models import HTMLField
 
 
 # Create your models here.
@@ -50,6 +51,7 @@ class Order(models.Model):
     car = models.ForeignKey(to="Car", verbose_name="Car", on_delete=models.CASCADE, null=True)
     client = models.ForeignKey(to=User, verbose_name="Client", on_delete=models.SET_NULL, null=True, blank=True)
     deadline = models.DateField(verbose_name="Deadline", default=data.today() + timedelta(days=7))
+    repair_request = HTMLField(verbose_name="Repair Request", max_length=3000, default="")
     ORDER_STATUS = (
         ('c', 'Completed'),
         ('i', 'In Progress'),

@@ -10,7 +10,8 @@ urlpatterns = [
     path('cars/<int:car_model>', views.car_model_view, name="CarModel"),
     path('orders/', views.OrdersAndOrderRows, name="Orders"),
     path('search/', views.search, name='search'),
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('register/', views.register, name='register')
 ] + (static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) +
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 
