@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% block "title" %}Delete Order{% endblock%}
+{% block 'content' %}
+<div class="content-section">
+    <form method="POST">
+        {% load crispy_forms_tags %}
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <h2>Delete order {{ instance.id }}?</h2>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-danger" type="submit">YES</button>
+            <a class="btn btn-outline-secondary" href="/myorders">NO</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

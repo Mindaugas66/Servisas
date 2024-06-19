@@ -57,25 +57,5 @@
         </div>
         {% endfor %}
     </div>
-
-    <div class="pagination-container d-flex justify-content-center mt-4">
-        {% if orders.has_other_pages %}
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    {% for i in orders.paginator.page_range %}
-                        {% if orders.number == i %}
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">{{ i }}</span>
-                            </li>
-                        {% else %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </nav>
-        {% endif %}
-    </div>
 </div>
 {% endblock %}

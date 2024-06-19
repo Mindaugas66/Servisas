@@ -3,7 +3,9 @@ from .models import (Car,
                      CarModel,
                      Service,
                      Order,
-                     OrderRow)
+                     OrderRow,
+                     OrderComment,
+                     Profile)
 
 
 class ServiceAdmin(admin.ModelAdmin):
@@ -30,10 +32,14 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderLineAdmin(admin.ModelAdmin):
     list_display = ['order', 'service', 'qty', 'price']
 
+class OrderCommentAdmin(admin.ModelAdmin):
+    list_display = ['order_id', 'date_added', 'commenter', 'comment']
 
-# Register your models here.
+
+admin.site.register(OrderComment, OrderCommentAdmin)
 admin.site.register(Car, CarAdmin)
 admin.site.register(CarModel)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderRow, OrderLineAdmin)
+admin.site.register(Profile)

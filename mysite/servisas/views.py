@@ -1,9 +1,11 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse
 from django.http import HttpResponse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
+from django.contrib.auth.decorators import login_required
 from .models import CarModel, Service, Order, Car, OrderRow
 import datetime
 from django.shortcuts import redirect
@@ -11,6 +13,9 @@ from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth import password_validation
+from .forms import OrderCommentForm, UserUpdateForm, ProfileUpdateForm
+from django.views.generic.edit import FormMixin, UpdateView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 def index(request):
@@ -34,7 +39,6 @@ def Cars(request):
     context = {
         "cars": cars
     }
-    print(cars)
     return render(request, template_name="cars.html", context=context)
 
 
@@ -48,7 +52,7 @@ def OrdersAndOrderRows(request):
         "orders": paged_orders,
         "order_rows": order_rows
     }
-    return render(request, template_name="orders.html", context=context)
+    return render(request, template_name="order.html", context=context)
 
 
 def car_model_view(request, car_model):
@@ -63,7 +67,7 @@ def car_model_view(request, car_model):
 
 class OrderListView(generic.ListView):
     model = Order
-    template_name = "Orders.html"
+    template_name = "order.html"
     context_object_name = "Orders"
     paginate_by = 3
 
@@ -75,7 +79,7 @@ def search(request):
         Q(vin_code__icontains=query) |
         Q(client__icontains=query) |
         Q(car_model__model__icontains=query) |  # Assuming the CarModel has a 'name' field
-        Q(car_model__make__icontains=query)   # Assuming the CarModel has a 'make' field
+        Q(car_model__make__icontains=query)  # Assuming the CarModel has a 'make' field
     )
     context = {
         "query": query,
@@ -84,7 +88,7 @@ def search(request):
     return render(request, template_name="search.html", context=context)
 
 
-class MyOrderListView(LoginRequiredMixin, generic.ListView):
+class MyOrdersListView(LoginRequiredMixin, generic.ListView):
     model = Order
     template_name = "user_orders.html"
     context_object_name = "orders"
@@ -124,3 +128,93 @@ def register(request):
             messages.error(request, 'Passwords doesnt match!')
             return redirect('register')
     return render(request, 'registration/register.html')
+
+
+class OrderDetailView(FormMixin, DetailView):
+    model = Order
+    template_name = "order.html"
+    context_object_name = "order"
+    form_class = OrderCommentForm
+
+    def get_success_url(self):
+        return reverse("order", kwargs={"pk": self.object.id})
+
+    # standartinis post metodo perrašymas, naudojant FormMixin, galite kopijuoti tiesiai į savo projektą.
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    # štai čia nurodome, kad knyga bus būtent ta, po kuria komentuojame, o vartotojas bus tas, kuris yra prisijungęs.
+    def form_valid(self, form):
+        form.instance.book = self.object
+        form.instance.reviewer = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        new_email = request.POST['email']
+        if new_email == "":
+            messages.error(request, f'El. paštas negali būti tuščias!')
+            return redirect('profile')
+        if request.user.email != new_email and User.objects.filter(email=new_email).exists():
+            messages.error(request, f'Vartotojas su el. paštu {new_email} jau užregistruotas!')
+            return redirect('profile')
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f"Profilis atnaujintas")
+            return redirect('profile')
+
+    u_form = UserUpdateForm(instance=request.user)
+    p_form = ProfileUpdateForm(instance=request.user.profile)
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+    }
+    return render(request, "profile.html", context=context)
+
+
+class NewOrderCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Order
+    fields = ["car", "deadline"]
+    success_url = "/myorders/"
+    template_name = "order_form.html"
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        return super().form_valid(form)
+
+
+class UserOrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Order
+    fields = ["car", "deadline"]
+    template_name = "order_form.html"
+    success_url = "/myorders/"
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        instance = self.get_object()
+        return instance.client == self.request.user
+
+
+class UserOrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Order
+    success_url = "/myorders/"
+    context_object_name = "order"
+    template_name = 'order_delete.html'
+
+    def test_func(self):
+        instance = self.get_object()
+        return instance.client == self.request.user

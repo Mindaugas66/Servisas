@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from datetime import date as data
 from datetime import timedelta
 from tinymce.models import HTMLField
-
+from PIL import Image
 
 # Create your models here.
 class Service(models.Model):
@@ -95,3 +95,31 @@ class OrderRow(models.Model):
     class Meta:
         verbose_name = "Order Line"
         verbose_name_plural = "Order Lines"
+
+
+class OrderComment(models.Model):
+    order_id = models.ForeignKey(to="Order", verbose_name="Order", on_delete=models.SET_NULL, null=True, blank=True, related_name="comments")
+    commenter = models.ForeignKey(to=User, verbose_name="Commenter", on_delete=models.SET_NULL, null=True, blank=True)
+    date_added = models.DateTimeField(verbose_name="Date", auto_now_add=True)
+    comment = models.TextField(verbose_name="Comment", max_length=1000)
+
+    class Meta:
+        verbose_name = "Order Comment"
+        verbose_name_plural = "Order comments"
+        ordering = ['-date_added']
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    photo = models.ImageField(default="profice_pics/default.png", upload_to="profile_pics")
+
+    def __str__(self):
+        return f"{self.user.username} Profile"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.photo.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.photo.path)
