@@ -13,7 +13,7 @@ from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth import password_validation
-from .forms import OrderCommentForm, UserUpdateForm, ProfileUpdateForm
+from .forms import OrderCommentForm, UserUpdateForm, ProfileUpdateForm, UserOrderCreateUpdateForm
 from django.views.generic.edit import FormMixin, UpdateView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -185,9 +185,10 @@ def profile(request):
 
 class NewOrderCreateView(LoginRequiredMixin, generic.CreateView):
     model = Order
-    fields = ["car", "deadline"]
+    # fields = ["car", "deadline"]
     success_url = "/myorders/"
     template_name = "order_form.html"
+    form_class = UserOrderCreateUpdateForm
 
     def form_valid(self, form):
         form.instance.client = self.request.user
@@ -196,7 +197,8 @@ class NewOrderCreateView(LoginRequiredMixin, generic.CreateView):
 
 class UserOrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Order
-    fields = ["car", "deadline"]
+    # fields = ["car", "deadline"]
+    form_class = UserOrderCreateUpdateForm
     template_name = "order_form.html"
     success_url = "/myorders/"
 
