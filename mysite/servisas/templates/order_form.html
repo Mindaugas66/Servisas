@@ -5,14 +5,15 @@
 {% block 'content' %}
 <div class="content-section">
     <form method="POST">
-    {% csrf_token %}
-    {% load crispy_forms_tags %}
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
         <legend class="border-bottom mb-4">New Order</legend>
         {{ form|crispy }}
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Save</button>
-            <button class="btn btn-outline-info" href="/order/{{ order.id }}">Back</button>
+            <a class="btn btn-outline-info" href="/myorders">Back</a>
         </div>
+
     </form>
 </div>
 {% endblock %}
